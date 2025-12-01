@@ -14,7 +14,7 @@
 
 
 ## 3. 빨간색 원(먹이)을 먹으면 뱀 길이가 증가
-<img width="596" height="603" alt="스크린샷 2025-12-02 013022" src="https://github.com/user-attachments/assets/8cd6e505-f318-42de-822b-e0167bc036f9" />
+<img width="591" height="599" alt="스크린샷 2025-12-02 012942" src="https://github.com/user-attachments/assets/50d117a5-1ece-4c75-a13e-43143e20d2dd" />
 
 
 
