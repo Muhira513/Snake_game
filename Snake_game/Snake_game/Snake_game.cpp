@@ -10,7 +10,7 @@ using namespace std;
 //#define MAX_LOADSTRING 100
 
 #define BSIZE 15 //
-#define BS 14 // 몸 사이즈
+#define BS 25 // 몸 사이즈
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 LPCTSTR lpszClass = TEXT("SNAKE GAME");
@@ -103,7 +103,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         srand((unsigned)time(NULL));
         fColor = RGB(0, 0, 0);
         // 타이머 생성 및 시작
-        SetTimer(hWnd, 1, 50, NULL);
+        SetTimer(hWnd, 1, 80, NULL);
         //SetTimer(hWnd, 2, 500, NULL);
         snake_x[0] = snake_y[0] = 100;
 
