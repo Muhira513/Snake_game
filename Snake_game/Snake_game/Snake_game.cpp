@@ -9,7 +9,7 @@ using namespace std;
 
 //#define MAX_LOADSTRING 100
 
-#define BSIZE 15 //
+#define BSIZE 20 // 음식 판정
 #define BS 25 // 몸 사이즈
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
@@ -75,15 +75,43 @@ bool correct(int food_x, int food_y, int snake_x, int snake_y) {
 
 // 음식 랜덤 생성
 void Food_Random(int* x, int* y) {
-        x[0] = (rand() % 500);
-        y[0] = (rand() % 500);
-    }
+    int minX = 7 + BS / 2;
+    int maxX = 580 - BS / 2;
+    int minY = 7 + BS / 2;
+    int maxY = 560 - BS / 2; 
+
+    x[0] = minX + rand() % (maxX - minX + 1);
+    y[0] = minY + rand() % (maxY - minY + 1);
+}
 
 //뱀의 몸 출력
 void Snake(HDC hdc, int length, int* x, int* y) {
-    for (int i = 0; i < length; i++)
-        Rectangle(hdc, x[i] - BS / 2, y[i] - BS / 2, x[i] + BS / 2, y[i] + BS / 2);
+    for (int i = 0; i < length; i++) {
+        HBRUSH osBrush, newBrush;
+
+        if (i == 0) {
+            newBrush = CreateSolidBrush(RGB(0, 200, 0));
+            osBrush = (HBRUSH)SelectObject(hdc, newBrush);
+
+            Rectangle(hdc, x[i] - BS / 2, y[i] - BS / 2, x[i] + BS / 2, y[i] + BS / 2);
+
+            SelectObject(hdc, osBrush);
+            DeleteObject(newBrush);
+        }
+
+        else {
+            newBrush = CreateSolidBrush(RGB(0, 0, 0));
+            osBrush = (HBRUSH)SelectObject(hdc, newBrush);
+
+            Rectangle(hdc, x[i] - BS / 2, y[i] - BS / 2, x[i] + BS / 2, y[i] + BS / 2);
+
+            SelectObject(hdc, osBrush);
+            DeleteObject(newBrush);
+        }
+    }
 }
+
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -183,8 +211,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if(start == 1) {
             if (correct(food_x[0], food_y[0], snake_x[0], snake_y[0])) {
 
-                food_x[0] = rand() % 500; // 먹이 위치 랜덤 재 생성
-                food_y[0] = rand() % 500; // 먹이 위치 랜덤 재 생성
+                food_x[0] = 7 + BS / 2 + rand() % (580 - 7 - BS); // 먹이 위치 랜덤 재 생성
+                food_y[0] = 7 + BS / 2 + rand() % (560 - 7 - BS); // 먹이 위치 랜덤 재 생성
 
                 eat++;
                 length++;
@@ -196,7 +224,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         /*if (length == 50)
             start = 2;*/
 
-        InvalidateRect(hWnd, NULL, TRUE);
+        InvalidateRect(hWnd, NULL, FALSE);
         break;
     }
     break;
@@ -215,32 +243,78 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 
-            TCHAR tmp[20];
-            SetTextColor(hdc, fColor);
-            if (start == -1)
-                TextOut(hdc, 200, 250, L"----- Press the 's' KEY -----", 28);
+        // 더블 버퍼링 시작(깜빡임 방지)
+        HDC memDC = CreateCompatibleDC(hdc);
+        HBITMAP memBitmap = CreateCompatibleBitmap(hdc, 600, 600);
+        HBITMAP oldBitmap = (HBITMAP)SelectObject(memDC, memBitmap);
 
-            else if (start == 1) {  //s누르고 시작할 때 먹이 랜덤 출력
-                TextOut(hdc, food_x[0], food_y[0], L"T", 1);
-                Snake(hdc, length, snake_x, snake_y);
-                wsprintf(tmp, L"SCORE: %d", eat);
-                TextOut(hdc, 490, 10, tmp, lstrlen(tmp));
-            }
-            else if (start == 0) {
-                TextOut(hdc, 250, 250, L"GAME OVER", 9);
-            }
-            else if (start == 2) {
-                TextOut(hdc, 250, 250, L"TIME  OVER", 9);
-            }
-            EndPaint(hWnd, &ps);
-            //ReleaseDC(hWnd, hdc);
+        // 배경 지우기 (흰색)
+        FillRect(memDC, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+        // 더블 버퍼링 끝
+
+        HPEN osPen, newPen;
+        HBRUSH osBrush, newBrush;
+
+        // 테두리 벽 그리기
+        newPen = CreatePen(PS_SOLID, 4, RGB(0, 0, 0));
+        osPen = (HPEN)SelectObject(memDC, newPen);
+
+        // 맵 벽
+        Rectangle(memDC, 7, 7, 580, 560);
+
+        SelectObject(memDC, osPen);
+        DeleteObject(newPen);
+
+        TCHAR tmp[20];
+        SetTextColor(memDC, fColor);
+        if (start == -1)
+            TextOut(memDC, 200, 250, L"----- Press the 's' KEY -----", 28);
+
+        else if (start == 1) {  //s누르고 시작할 때 먹이 랜덤 출력
+            newPen = (HPEN)CreatePen(PS_SOLID, 5, RGB(255, 102, 102));
+            osPen = (HPEN)SelectObject(memDC, newPen);
+
+            newBrush = (HBRUSH)CreateSolidBrush(RGB(255, 102, 102));
+            osBrush = (HBRUSH)SelectObject(memDC, newBrush);
+
+            Ellipse(memDC,
+                food_x[0] - BS / 2, food_y[0] - BS / 2,
+                food_x[0] + BS / 2, food_y[0] + BS / 2);
+
+            SelectObject(memDC, osPen);
+            SelectObject(memDC, osBrush);
+
+            DeleteObject(newPen);
+            DeleteObject(newBrush);
+
+            Snake(memDC, length, snake_x, snake_y);
+            wsprintf(tmp, L"SCORE: %d", eat);
+            TextOut(memDC, 490, 10, tmp, lstrlen(tmp));
         }
-        break;
+        else if (start == 0) {
+            TextOut(memDC, 250, 250, L"GAME OVER", 9);
+        }
+        else if (start == 2) {
+            TextOut(memDC, 250, 250, L"TIME  OVER", 9);
+        }
+
+        // 메모리 DC를 실제 화면에 출력
+        BitBlt(hdc, 0, 0, 600, 600, memDC, 0, 0, SRCCOPY);
+
+        // 정리
+        SelectObject(memDC, oldBitmap);
+        DeleteObject(memBitmap);
+        DeleteDC(memDC);
+
+        EndPaint(hWnd, &ps);
+        //ReleaseDC(hWnd, hdc);
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
