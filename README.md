@@ -19,5 +19,5 @@
 
 
 ## 자신의 몸(사각형)에 닿거나 벽에 부딪히면
-## 이렇게 게임오버 문구가 뜹니다
+이렇게 게임오버 문구가 뜹니다
 <img width="593" height="598" alt="스크린샷 2025-12-02 013037" src="https://github.com/user-attachments/assets/735a760e-9142-4e0b-b8b7-618569dcd73a" />
