@@ -273,7 +273,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TCHAR tmp[20];
         SetTextColor(memDC, fColor);
         if (start == -1)
-            TextOut(memDC, 200, 250, L"----- start : s, exit : e -----", 28); // s키를 눌러서 게임을 시작하라는 문구다
+            TextOut(memDC, 220, 250, L"----- start : s, exit : e -----", 28); // s키를 눌러서 게임을 시작하라는 문구다
 
         else if (start == 1) {  //s누르고 시작할 때 먹이 랜덤 출력
             newPen = (HPEN)CreatePen(PS_SOLID, 5, RGB(255, 102, 102));  // 브러쉬 생성
