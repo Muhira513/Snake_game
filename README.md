@@ -12,7 +12,6 @@
 
 
 
-
 ## 2. 초기 뱀 상태
 <img width="596" height="603" alt="스크린샷 2025-12-02 013022" src="https://github.com/user-attachments/assets/1d137bfd-0794-445b-a763-efb5dc1f979b" />
 
