@@ -20,30 +20,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     HWND hwnd;
     MSG msg;
     WNDCLASS WndClass;
-    WndClass.style = CS_HREDRAW | CS_VREDRAW;
+    WndClass.style = CS_HREDRAW | CS_VREDRAW;   // 창 스타일
     WndClass.lpfnWndProc = WndProc;
     WndClass.cbClsExtra = 0;
     WndClass.cbWndExtra = 0;
-    WndClass.hInstance = hInstance;
-    WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    WndClass.lpszMenuName = NULL;
-    WndClass.lpszClassName = lpszClass;
-    RegisterClass(&WndClass);
+    WndClass.hInstance = hInstance; // 윈도우즈 운영체제에서 실행되는 프로그램들을 구별하기 위한 ID값
+    WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);   // 저장된 아이콘을 메모리로 불러오는 함수
+    WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);     // 마우스 커서, 사용자 정의 커서 등 소스를 메모리로 불러오기 / 해당 커서 핸들을 반환하여 화면에 표시하도록 준비
+    WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);   // 윈도우(배경) 하얀색 배경 불러오기
+    WndClass.lpszMenuName = NULL;   // 메뉴바 추가 안함 
+    WndClass.lpszClassName = lpszClass; 
+    RegisterClass(&WndClass);  // 윈도우 클래스(설계도) 시스템 등록
 
     hwnd = CreateWindow(lpszClass,
         lpszClass,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        600,
-        600,
+        600,    // 600 x 600
+        600,    // 600 x 600
         NULL,
         NULL,
         hInstance,
         NULL
-    );
+    );  //CreateWindow 자식창 생성 : 겹쳐진 창, 팝업 창 등(창 클래스, 창 제목, 창 스타일)
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
