@@ -44,8 +44,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
         hInstance,
         NULL
     );  //CreateWindow 자식창 생성 : 겹쳐진 창, 팝업 창 등(창 클래스, 창 제목, 창 스타일)
-    ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
+    ShowWindow(hwnd, nCmdShow); // 윈도우 창 표시(결정) / CreateWindow : 윈도우 창 생성
+    UpdateWindow(hwnd); // 윈도우 창 즉시 화면 그리기
 
     while (GetMessage(&msg, NULL, 0, 0))
     {
