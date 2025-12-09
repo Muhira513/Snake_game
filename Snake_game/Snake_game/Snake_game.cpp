@@ -15,7 +15,7 @@ using namespace std;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 LPCTSTR lpszClass = TEXT("SNAKE GAME"); // 제목 표지
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpszCmdLine, _In_ int nCmdShow)
 {
     HWND hwnd;
     MSG msg;
@@ -157,7 +157,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
     {
         int i;
-        int j;
+        int j = 0;
         // 게임이 시작했을 때 타이머 1번(뱀 움직임용 타이머)
         if (wParam == 1 && start == 1) {
             if (MOVE == 1) {
